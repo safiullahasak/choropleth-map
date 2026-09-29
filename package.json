@@ -1,0 +1,23 @@
+{
+  "name": "choropleth-map",
+  "version": "1.0.0",
+  "description": "A small, dependency-free SVG choropleth map library for GeoJSON.",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/choropleth-map.js",
+    "./style.css": "./src/choropleth-map.css"
+  },
+  "files": [
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "choropleth",
+    "geojson",
+    "map",
+    "svg",
+    "data-visualization"
+  ]
+}

@@ -1,0 +1,12 @@
+.choropleth-map-svg{display:block;width:100%;height:100%;overflow:visible}
+.choropleth-feature{stroke:var(--choropleth-border,#f4f6eb);stroke-width:1.35;stroke-linejoin:round;vector-effect:non-scaling-stroke;cursor:pointer;transition:fill .25s,filter .2s,stroke .2s}
+.choropleth-feature:hover{stroke:var(--choropleth-hover-stroke,#d5a94f);stroke-width:3;filter:drop-shadow(0 0 4px #d5a94f99)}
+.choropleth-feature.is-selected{stroke:var(--choropleth-selected-stroke,#fff5d8);stroke-width:2.8;filter:drop-shadow(0 0 3px #244b2e55)}
+.choropleth-feature:focus-visible{outline:none;stroke:var(--choropleth-focus-stroke,#316d4d);stroke-width:3}
+.choropleth-label{font:600 9px system-ui,sans-serif;fill:#244734;text-anchor:middle;dominant-baseline:central;pointer-events:none;paint-order:stroke;stroke:#eff3e9;stroke-width:3px;stroke-linejoin:round}
+.choropleth-tooltip{display:none;position:absolute;z-index:10;pointer-events:none}
+.choropleth-tooltip.is-visible{display:block}
+.choropleth-legend-title{font:700 9px system-ui,sans-serif;letter-spacing:.12em}
+.choropleth-legend-ramp{display:flex;gap:3px}
+.choropleth-legend-ramp span{width:28px;height:7px}
+.choropleth-legend-labels{display:flex;justify-content:space-between;font:8px system-ui,sans-serif}

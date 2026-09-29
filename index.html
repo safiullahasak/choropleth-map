@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123c32">
+  <title>Balochistan Population Atlas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="./src/choropleth-map.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Balochistan Population Atlas home">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span><strong>FIELDNOTE</strong><small>DATA ATLAS</small></span>
+      </a>
+      <div class="topbar-right"><span class="source-dot"></span><span>GOVERNMENT DATA · CENSUS 2023</span><button class="about-button" id="sourceButton">Sources & method <span aria-hidden="true">↗</span></button></div>
+    </header>
+
+    <main id="top">
+      <section class="intro">
+        <div class="intro-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> BALOCHISTAN · PAKISTAN</div>
+          <h1>People across<br><em>the province.</em></h1>
+          <p>Explore population and density district by district, from the highlands to the Makran coast.</p>
+        </div>
+        <div class="intro-stats">
+          <div class="stat-label">TOTAL POPULATION <span>01</span></div>
+          <div class="stat-value" id="totalPopulation">14,894,402</div>
+          <div class="stat-foot"><span class="pulse-dot"></span> 2023 population census <i></i> 31 map areas</div>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Interactive district population map">
+        <div class="map-card">
+          <div class="map-toolbar">
+            <div><span class="section-kicker">SPATIAL OVERVIEW</span><h2>District population</h2></div>
+            <div class="view-switch" role="group" aria-label="Map measure">
+              <button class="view-button active" data-mode="population">Population</button>
+              <button class="view-button" data-mode="density">Density</button>
+            </div>
+          </div>
+          <div class="map-stage" id="mapStage">
+            <div class="map-wash wash-one"></div><div class="map-wash wash-two"></div>
+            <svg id="map" role="img" aria-label="Choropleth map of Balochistan districts colored by population"></svg>
+            <div class="map-compass" aria-hidden="true"><span>N</span><b>↑</b></div>
+            <div class="map-legend" id="mapLegend"></div>
+            <div class="map-hover-card" id="hoverCard" data-choropleth-tooltip aria-live="polite"></div>
+          </div>
+          <div class="map-foot"><span class="map-note"><span class="note-icon">i</span> Select a district to explore its population profile</span><span class="map-scale">BOUNDARIES · PBS / OPEN DATA</span></div>
+        </div>
+
+        <aside class="detail-card" id="detailCard" aria-live="polite">
+          <div class="detail-top"><span class="section-kicker">DISTRICT PROFILE</span><button class="clear-selection" id="clearSelection" aria-label="Clear selected district">↗</button></div>
+          <div class="profile-empty" id="profileEmpty">
+            <div class="empty-icon"><span>⌖</span></div>
+            <h3>Choose a district</h3>
+            <p>Select an area on the map or from the district list to see its population profile.</p>
+          </div>
+          <div class="profile-content hidden" id="profileContent">
+            <div class="district-heading"><span class="profile-index" id="profileIndex">01 / 31</span><h3 id="profileName">Quetta</h3><span class="division-tag" id="profileDivision">QUETTA DIVISION</span></div>
+            <div class="profile-number" id="profilePopulation">2,595,492</div>
+            <div class="profile-caption">PEOPLE · 2023 CENSUS</div>
+            <div class="share-block"><div class="share-label"><span>Share of province</span><strong id="profileShare">17.4%</strong></div><div class="share-track"><span id="shareBar"></span></div></div>
+            <div class="profile-metrics"><div><span>POPULATION DENSITY</span><strong id="profileDensity">753</strong><small>people / km²</small></div><div><span>LAND AREA</span><strong id="profileArea">3,447</strong><small>square kilometres</small></div></div>
+            <div class="profile-footnote" id="profileFootnote"></div>
+          </div>
+          <div class="profile-rule"></div>
+          <div class="rank-head"><div><span class="section-kicker">DISTRICT INDEX</span><h3>Population ranking</h3></div><span class="rank-count" id="districtCount">31 areas</span></div>
+          <label class="searchbox"><span aria-hidden="true">⌕</span><input type="search" id="districtSearch" placeholder="Find a district" autocomplete="off"><kbd>⌘ K</kbd></label>
+          <div class="district-list" id="districtList"></div>
+          <div class="rank-footer"><span>Largest</span><span>Showing population · 2023</span></div>
+        </aside>
+      </section>
+
+      <section class="insight-strip">
+        <div class="insight-title"><span class="section-kicker">A QUICK READ</span><strong>Population at a glance</strong></div>
+        <div class="insight-item"><span class="insight-mark">↗</span><div><small>MOST POPULOUS AREA</small><strong id="largestArea">Quetta <i>·</i> 2.60M</strong></div></div>
+        <div class="insight-item"><span class="insight-mark density-mark">⌗</span><div><small>HIGHEST DENSITY</small><strong id="densestArea">Jaffarabad <i>·</i> 362 / km²</strong></div></div>
+        <div class="insight-item"><span class="insight-mark">◌</span><div><small>POPULATION IN TOP 5</small><strong id="topFiveShare">46.7% of province</strong></div></div>
+      </section>
+      <footer class="footer"><span>FIELDNOTE <i>—</i> A LOCAL DATA EXPLORER</span><span>POPULATION & HOUSING CENSUS 2023 <i>·</i> PAKISTAN BUREAU OF STATISTICS</span></footer>
+    </main>
+  </div>
+  <dialog id="sourceDialog" class="source-dialog">
+    <button class="dialog-close" id="closeDialog" aria-label="Close">×</button>
+    <span class="section-kicker">ABOUT THIS MAP</span><h2>Sources & method</h2>
+    <p>Population counts come from Table 1 of the Pakistan Bureau of Statistics’ Population and Housing Census 2023 for Balochistan. The province total shown is 14,894,402.</p>
+    <p>The district outlines come from the public Pakistan administrative GeoJSON boundary set. Three census districts created after those outlines were produced are grouped with their parent outline: Chaman with Killa Abdullah, Duki with Loralai, and Surab with Kalat. Their population and land area are summed for those map areas.</p>
+    <p>Density is calculated as population divided by the summed land area. This map is a local demonstration and is not an official Government of Balochistan product.</p>
+    <div class="source-links"><a href="https://www.pbs.gov.pk/wp-content/uploads/census_tables/tables/table_1_balochistan_districts.pdf" target="_blank" rel="noreferrer">Open official PBS Census Table 1 <span>↗</span></a><a href="https://github.com/hibasameen/datadarbar" target="_blank" rel="noreferrer">Boundary dataset notes <span>↗</span></a><a href="https://www.bospnd.balochistan.gov.pk/" target="_blank" rel="noreferrer">Balochistan Bureau of Statistics <span>↗</span></a></div>
+  </dialog>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
