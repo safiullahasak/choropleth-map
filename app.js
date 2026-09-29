@@ -28,7 +28,26 @@ async function startAtlas() {
   function renderList(selectedName = null) {
     const query = search.value.trim().toLowerCase();
     const visible = sorted.filter(row => row.name.toLowerCase().includes(query));
-    list.innerHTML = visible.map((row,i) => `<button class="district-row${selectedName===row.name?' selected':''}" data-name="${row.name}"><span class="row-rank">${String(i+1).padStart(2,'0')}</span><span class="row-name">${row.name}</span><span class="row-value">${shortFmt(row.population)}</span><span class="row-state">${selectedName===row.name?'✓':''}</span></button>`).join('');
+    const fragment = document.createDocumentFragment();
+    visible.forEach((row, i) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `district-row${selectedName === row.name ? ' selected' : ''}`;
+      button.dataset.name = row.name;
+      for (const [className, text] of [
+        ['row-rank', String(i + 1).padStart(2, '0')],
+        ['row-name', row.name],
+        ['row-value', shortFmt(row.population)],
+        ['row-state', selectedName === row.name ? '✓' : '']
+      ]) {
+        const span = document.createElement('span');
+        span.className = className;
+        span.textContent = text;
+        button.append(span);
+      }
+      fragment.append(button);
+    });
+    list.replaceChildren(fragment);
     list.querySelectorAll('.district-row').forEach(button => button.addEventListener('click', () => map.select(button.dataset.name)));
     document.querySelector('#districtCount').textContent = `${visible.length} areas`;
   }
@@ -68,7 +87,9 @@ async function startAtlas() {
     formatValue: value => fmt.format(value),
     renderTooltip: ({key, row}) => {
       const card = document.createElement('div'); card.className = 'hover-tooltip-content';
-      const kicker = document.createElement('div'); kicker.className = 'hover-kicker'; kicker.innerHTML = '<span></span>POPULATION · CENSUS 2023';
+      const kicker = document.createElement('div'); kicker.className = 'hover-kicker';
+      const kickerDot = document.createElement('span');
+      kicker.append(kickerDot, document.createTextNode('POPULATION · CENSUS 2023'));
       const name = document.createElement('div'); name.className = 'map-hover-name'; name.textContent = key;
       const value = document.createElement('div'); value.className = 'map-hover-value'; value.textContent = fmt.format(row.population);
       const divider = document.createElement('div'); divider.className = 'hover-divider';
@@ -95,13 +116,25 @@ async function startAtlas() {
 
   const topFive = sorted.slice(0,5).reduce((sum,row)=>sum+row.population,0);
   const densest = [...data.districts].sort((a,b)=>b.population/b.area-a.population/a.area)[0];
-  document.querySelector('#largestArea').innerHTML = `${sorted[0].name} <i>·</i> ${shortFmt(sorted[0].population)}`;
-  document.querySelector('#densestArea').innerHTML = `${densest.name} <i>·</i> ${fmt.format(Math.round(densest.population/densest.area))} / km²`;
+  for (const [selector, name, value] of [
+    ['#largestArea', sorted[0].name, shortFmt(sorted[0].population)],
+    ['#densestArea', densest.name, `${fmt.format(Math.round(densest.population/densest.area))} / km²`]
+  ]) {
+    const metric = document.querySelector(selector);
+    const separator = document.createElement('i');
+    separator.textContent = '·';
+    metric.replaceChildren(document.createTextNode(`${name} `), separator, document.createTextNode(` ${value}`));
+  }
   document.querySelector('#topFiveShare').textContent = `${(100*topFive/data.provincePopulation).toFixed(1)}% of province`;
   renderList();
 }
 
 startAtlas().catch(error => {
   console.error(error);
-  document.querySelector('#mapStage').innerHTML = '<div class="load-error"><strong>Map data could not load.</strong><br>Start the local web server and reload this page.</div>';
+  const message = document.createElement('div');
+  message.className = 'load-error';
+  const title = document.createElement('strong');
+  title.textContent = 'Map data could not load.';
+  message.append(title, document.createElement('br'), document.createTextNode('Start the local web server and reload this page.'));
+  document.querySelector('#mapStage').replaceChildren(message);
 });
