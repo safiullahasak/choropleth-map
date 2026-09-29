@@ -2,6 +2,8 @@
 
 A small, dependency-free JavaScript library for interactive GeoJSON choropleth maps. It draws responsive SVG maps, joins tabular values to GeoJSON features, adds hover details and keyboard-accessible selection, and can render a color legend. The included Balochistan Population Atlas is a complete example using public census and district boundary data.
 
+![Screenshot of the interactive Balochistan population atlas demo](assets/choropleth-map.png)
+
 ## Quick start
 
 Install directly from GitHub:
